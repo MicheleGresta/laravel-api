@@ -44,7 +44,7 @@ class ProjectController extends Controller
             'language' => 'nullable|string'
         ]);
 
-        $project = Project::create($data);
+        $projects = Project::create($data);
 
         return redirect()->route("admin.projects.index");
     }
@@ -54,7 +54,7 @@ class ProjectController extends Controller
     {
         $projects = Project::findOrFail($id);
 
-        return view("admin.projects.edit", ["projects" => $projects]);
+        return view("admin.projects.edit", compact("projects"));
     }
 
     // UPDATE
@@ -62,7 +62,19 @@ class ProjectController extends Controller
     {
         $projects = Project::findOrFail($id);
 
+        $data = $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'image' => 'nullable|string',
+            'link' => 'required|string',
+            'date' => 'nullable|date',
+            'language' => 'nullable|string'
+        ]);
 
+        $data["language"] = json_encode([$data["language"]]);
+        // {{ join(', ', json_decode($projects->language))  nell' html
+
+        $projects->update($data);
 
         return redirect()->route("admin.projects.show", $projects->id);
     }
