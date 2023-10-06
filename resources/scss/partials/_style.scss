@@ -1,0 +1,77 @@
+.bg-main {
+    background-color: rgb(28, 105, 28);
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+
+    a {
+        text-decoration: none;
+        color: black;
+        overflow: hidden;
+        border-radius: 50%;
+
+        &:hover {
+            color: rgb(36, 128, 0);
+        }
+
+
+    }
+}
+
+.link-custom {
+    padding: 13rem;
+    position: absolute;
+    background-color: rgb(6, 71, 6);
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+
+}
+
+.pos-top-left {
+    top: -9rem;
+    left: -8rem;
+
+    img {
+        position: absolute;
+        bottom: -4rem;
+        right: -4rem;
+    }
+}
+
+.pos-top-right {
+    top: -9rem;
+    right: -8rem;
+
+    img {
+        position: absolute;
+        bottom: -4rem;
+        left: -4rem;
+    }
+}
+
+.pos-bottom-right {
+    bottom: -9rem;
+    right: -8rem;
+
+    img {
+        position: absolute;
+        top: -44px;
+        left: -3rem;
+    }
+}
+
+.pos-bottom-left {
+    bottom: -9rem;
+    left: -8rem;
+
+    img {
+        position: absolute;
+        top: -1rem;
+        right: -2rem;
+    }
+}
