@@ -1,10 +1,10 @@
 .bg-main {
     background-color: rgb(28, 105, 28);
-    height: 100vh;
+    min-height: 100vh;
     overflow: hidden;
     position: relative;
 
-    a {
+    &>a {
         text-decoration: none;
         color: black;
         overflow: hidden;
@@ -16,6 +16,10 @@
 
 
     }
+}
+
+.container{
+    max-width: 1080px;
 }
 
 .link-custom {

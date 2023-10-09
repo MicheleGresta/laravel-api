@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("image");
             $table->string("link");
             $table->date("date");
-            $table->string("language");
+            $table->json("language");
 
             $table->timestamps();
         });

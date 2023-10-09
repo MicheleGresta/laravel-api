@@ -26,11 +26,11 @@ class ProjectController extends Controller
     }
 
     // SHOW
-    public function show(string $title)
-    // public function show($id)
+    //public function show(string $title)
+    public function show($id)
     {
-        $projects = Project::where("title", $title)->first();
-        // $projects = Project::findOrFail($id);
+        // $projects = Project::where("title", $title)->first();
+        $projects = Project::findOrFail($id);
 
         return view("admin.projects.show", compact("projects"));
     }
@@ -53,10 +53,11 @@ class ProjectController extends Controller
             'date' => 'nullable|date',
             'language' => 'nullable|string'
         ]);     
-
+        $data["language"] = explode(", ", $data["language"]);
+        
         $projects = Project::create($data);
 
-        return redirect()->route("admin.projects.index");
+        return redirect()->route("admin.projects.show", $projects->id);
     }
 
     // EDIT
@@ -95,6 +96,6 @@ class ProjectController extends Controller
         $projects = Project::findOrFail($id);
         $projects->delete();
 
-        return redirect()->route("admin.projects.index");
+        return redirect()->route("layouts.projectPage");
     }
 }

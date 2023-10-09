@@ -19,7 +19,7 @@
             </div>
             <div class="col-md-6 py-3">
                 <div class="input-size">
-                    <input type="text" class="form-control" name="title" placeholder="URL image">
+                    <input type="text" class="form-control" name="image" placeholder="URL image">
                 </div>
             </div>
             <div class="col-md-6 py-3">
@@ -40,7 +40,7 @@
             </div>
             <div class="col-md-6 py-3">
                 <div class="input-size">
-                    <input type="text" class="form-control" name="date" placeholder="Publish Date">
+                    <input type="date" class="form-control" name="date" placeholder="Publish Date">
                 </div>
             </div>
             <div class="col-md-6 py-3">
@@ -49,7 +49,8 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary my-3">Add Project to your Page</button>
-        </form>
+            <button type="submit" class="btn btn-primary my-3">Add Project to your Page</button>
+            </form>
+
     </div>{{-- chiusura container --}}
 @endsection

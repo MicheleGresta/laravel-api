@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,7 +35,7 @@ Route::middleware('auth')->group(function () {
 });
 
 //ROTTE PER VERIFICATI
-Route::middleware(["auth", "verified"])
+Route::middleware(["auth"])
     ->prefix("admin")
     ->name("admin.")
     ->group(function () {
