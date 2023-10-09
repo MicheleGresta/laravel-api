@@ -17,10 +17,20 @@ class ProjectController extends Controller
         return view("admin.projects.index", compact("projects"));
     }
 
+    // INDEX PROGETTI
+    public function projectPage(): View
+    {
+        $projects = Project::all();
+
+        return view("layouts.projectPage", compact("projects"));
+    }
+
     // SHOW
     public function show(string $title)
+    // public function show($id)
     {
-        $projects = Project::where("title", $title);
+        $projects = Project::where("title", $title)->first();
+        // $projects = Project::findOrFail($id);
 
         return view("admin.projects.show", compact("projects"));
     }
@@ -37,12 +47,12 @@ class ProjectController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string',
-            'description' => 'required|string',
             'image' => 'nullable|string',
+            'description' => 'nullable|string',
             'link' => 'required|string',
             'date' => 'nullable|date',
             'language' => 'nullable|string'
-        ]);
+        ]);     
 
         $projects = Project::create($data);
 

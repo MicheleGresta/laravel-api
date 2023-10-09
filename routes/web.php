@@ -15,20 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+// pagina d'avvio
 Route::get('/', function () {
     return view('admin.projects.index');
 });
 
+// DASHBOARD PAGE
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// PROFILE PAGE
 Route::middleware('auth')->group(function () {
     Route::get('/admin/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/admin/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/admin/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//ROTTE PER VERIFICATI
 Route::middleware(["auth", "verified"])
     ->prefix("admin")
     ->name("admin.")
@@ -53,5 +58,12 @@ Route::middleware(["auth", "verified"])
         
         Route::delete('/projects/{projects}', [ProjectController::class, 'destroy'])->name('projects.destroy');
     });
+
+
+Route::get('/home', [ProjectController::class, 'index'])->name('admin.index');
+
+// click di project button, indirizza alla pagina dei progetti:
+Route::get('/projects', [ProjectController::class, 'projectPage'])->name('layouts.projectPage');
+    
 
 require __DIR__.'/auth.php';
