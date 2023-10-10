@@ -28,7 +28,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // PROFILE PAGE
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')
+    ->name("admin.")
+    ->group(function () {
     Route::get('/admin/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/admin/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/admin/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -65,6 +67,8 @@ Route::get('/home', [ProjectController::class, 'index'])->name('admin.index');
 
 // click di project button, indirizza alla pagina dei progetti:
 Route::get('/projects', [ProjectController::class, 'projectPage'])->name('layouts.projectPage');
+// pagina pubblica
+// Route::get('/guest/show/{projects}', [ProjectController::class, 'showPublic'])->name('projects.show');
     
 
 require __DIR__.'/auth.php';

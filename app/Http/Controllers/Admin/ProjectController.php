@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
-    // INDEX
+    // INDEX HOME PAGE
     public function index(): View
     {
         $projects = Project::all();
@@ -25,7 +26,7 @@ class ProjectController extends Controller
         return view("layouts.projectPage", compact("projects"));
     }
 
-    // SHOW
+    // SHOW SINGLE PROJECTS
     //public function show(string $title)
     public function show($id)
     {
@@ -35,32 +36,44 @@ class ProjectController extends Controller
         return view("admin.projects.show", compact("projects"));
     }
 
-    // CREATE
+    public function showPublic($id)
+    {
+        $projects = Project::findOrFail($id);
+
+        return view("projects.show", compact("projects"));
+    }
+
+    // CREATE NEW PROJECT
     public function create()
     {
 
         return view("admin.projects.create");
     }
 
-    // STORE
+    // STORE 
     public function store(Request $request)
     {
         $data = $request->validate([
             'title' => 'required|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image',
             'description' => 'nullable|string',
             'link' => 'required|string',
             'date' => 'nullable|date',
             'language' => 'nullable|string'
         ]);     
         $data["language"] = explode(", ", $data["language"]);
-        
+
+
+        // STORAGE PUT
+        $img_path = Storage::put("uploads", $data["image"]);
+         
+        // $data->image = $img_path;
         $projects = Project::create($data);
 
         return redirect()->route("admin.projects.show", $projects->id);
     }
 
-    // EDIT
+    // EDIT PROJECT
     public function edit($id)
     {
         $projects = Project::findOrFail($id);
@@ -68,7 +81,7 @@ class ProjectController extends Controller
         return view("admin.projects.edit", compact("projects"));
     }
 
-    // UPDATE
+    // UPDATE PROJECT
     public function update(Request $request, $id)
     {
         $projects = Project::findOrFail($id);
@@ -90,7 +103,7 @@ class ProjectController extends Controller
         return redirect()->route("admin.projects.show", $projects->id);
     }
 
-    // DESTROY
+    // DESTROY PROJECT
     public function destroy($id)
     {
         $projects = Project::findOrFail($id);
@@ -98,4 +111,5 @@ class ProjectController extends Controller
 
         return redirect()->route("layouts.projectPage");
     }
+
 }

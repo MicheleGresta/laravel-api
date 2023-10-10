@@ -3,7 +3,7 @@
     <div class="container">
 
         <h1>create</h1>
-        <form action="{{ route('admin.projects.store') }}" method="POST">
+        <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
             <div class="col-md-6 py-3">
@@ -19,6 +19,7 @@
             </div>
             <div class="col-md-6 py-3">
                 <div class="input-size">
+                    <input type="file" name="image" accept="image/*">
                     <input type="text" class="form-control" name="image" placeholder="URL image" value="{{ old("image", $projects->image)}}">
                 </div>
             </div>
