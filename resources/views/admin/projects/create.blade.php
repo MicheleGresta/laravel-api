@@ -20,7 +20,7 @@
             <div class="col-md-6 py-3">
                 <div class="input-size">
                     <input type="file" name="image" accept="image/*">
-                    <input type="text" class="form-control" name="image" placeholder="URL image">
+                    {{-- <input type="text" class="form-control" name="image-text" placeholder="URL image"> --}}
                 </div>
             </div>
             <div class="col-md-6 py-3">

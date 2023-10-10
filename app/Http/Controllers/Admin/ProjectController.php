@@ -7,6 +7,8 @@ use App\Models\Project;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Facades\Log;
+use Log;
 
 class ProjectController extends Controller
 {
@@ -53,21 +55,21 @@ class ProjectController extends Controller
     // STORE 
     public function store(Request $request)
     {
+
         $data = $request->validate([
             'title' => 'required|string',
-            'image' => 'nullable|image',
+            'image' => 'nullable|image|max:5120',
             'description' => 'nullable|string',
             'link' => 'required|string',
             'date' => 'nullable|date',
             'language' => 'nullable|string'
-        ]);     
+        ]);
         $data["language"] = explode(", ", $data["language"]);
 
 
         // STORAGE PUT
-        $img_path = Storage::put("uploads", $data["image"]);
-         
-        // $data->image = $img_path;
+        $data['image'] = Storage::put("uploads", $data["image"]);
+
         $projects = Project::create($data);
 
         return redirect()->route("admin.projects.show", $projects->id);
@@ -89,15 +91,19 @@ class ProjectController extends Controller
         $data = $request->validate([
             'title' => 'required|string',
             'description' => 'required|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|max:5120',
             'link' => 'required|string',
             'date' => 'nullable|date',
             'language' => 'nullable|string'
         ]);
 
         $data["language"] = json_encode([$data["language"]]);
-        // {{ join(', ', json_decode($projects->language))  nell' html
 
+
+        // STORAGE PUT
+        $data["image"] = Storage::put("uploads", $data["image"]);
+
+        // save 
         $projects->update($data);
 
         return redirect()->route("admin.projects.show", $projects->id);
@@ -107,9 +113,11 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         $projects = Project::findOrFail($id);
+        if ($projects->image) {
+            Storage::delete($projects->image);
+        }
         $projects->delete();
 
         return redirect()->route("layouts.projectPage");
     }
-
 }

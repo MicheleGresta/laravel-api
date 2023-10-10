@@ -20,7 +20,7 @@
             <div class="col-md-6 py-3">
                 <div class="input-size">
                     <input type="file" name="image" accept="image/*">
-                    <input type="text" class="form-control" name="image" placeholder="URL image" value="{{ old("image", $projects->image)}}">
+                    {{-- <input type="text" class="form-control" name="image" placeholder="URL image" value="{{ old("image", $projects->image)}}"> --}}
                 </div>
             </div>
             <div class="col-md-6 py-3">
