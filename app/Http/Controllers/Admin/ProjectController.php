@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Type;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-// use Illuminate\Support\Facades\Log;
 use Log;
 
 class ProjectController extends Controller
@@ -32,8 +32,10 @@ class ProjectController extends Controller
     //public function show(string $title)
     public function show($id)
     {
+        
         // $projects = Project::where("title", $title)->first();
         $projects = Project::findOrFail($id);
+        
 
         return view("admin.projects.show", compact("projects"));
     }
@@ -41,6 +43,7 @@ class ProjectController extends Controller
     public function showPublic($id)
     {
         $projects = Project::findOrFail($id);
+        
 
         return view("projects.show", compact("projects"));
     }
@@ -49,7 +52,9 @@ class ProjectController extends Controller
     public function create()
     {
 
-        return view("admin.projects.create");
+        $types = Type::all();
+
+        return view("admin.projects.create", compact("types"));
     }
 
     // STORE 
@@ -62,9 +67,11 @@ class ProjectController extends Controller
             'description' => 'nullable|string',
             'link' => 'required|string',
             'date' => 'nullable|date',
-            'language' => 'nullable|string'
+            'language' => 'nullable|string',
+            'type_id'=> 'exists:types,id'
         ]);
         $data["language"] = explode(", ", $data["language"]);
+        
 
 
         // STORAGE PUT
@@ -79,8 +86,9 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $projects = Project::findOrFail($id);
+        $types = Type::all();
 
-        return view("admin.projects.edit", compact("projects"));
+        return view("admin.projects.edit", compact("projects","types"));
     }
 
     // UPDATE PROJECT
@@ -94,7 +102,8 @@ class ProjectController extends Controller
             'image' => 'nullable|image|max:5120',
             'link' => 'required|string',
             'date' => 'nullable|date',
-            'language' => 'nullable|string'
+            'language' => 'nullable|string',
+            'type_id'=> 'exists:types,id'
         ]);
 
         $data["language"] = json_encode([$data["language"]]);
@@ -106,7 +115,7 @@ class ProjectController extends Controller
         // save 
         $projects->update($data);
 
-        return redirect()->route("admin.projects.show", $projects->id);
+        return redirect()->route("admin.projects.show", compact($projects->id));
     }
 
     // DESTROY PROJECT

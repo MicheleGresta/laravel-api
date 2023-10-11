@@ -12,9 +12,10 @@
                 <h5><strong>Description: </strong>{{ $projects->description }}</h5>
                 <p><strong>Publish date: </strong>{{ $projects->date }}</p>
                 <p><strong>Languages Used: </strong>{{ implode(', ', $projects->language) }}</p>
+                <h5 class="my-3">Type: {{$projects->type->type ?? ""}}</h5>
                 <a href="{{ $projects->link }}" class="btn btn-outline-info">
                     <h5><strong>GitHub link</strong></h5>
-                </a>
+                </a>                
                 <div class="my-3">
                     <a href="{{ route('admin.projects.edit', $projects->id) }}" class="btn btn-outline-warning"><i class="fa-solid fa-pen"></i></a>
                     <form action="{{ route('admin.projects.destroy', $projects->id) }}" method="post"

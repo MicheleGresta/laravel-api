@@ -14,6 +14,7 @@
             </a>
             <p>{{ $projects->date }}</p>
             <p>{{ implode(', ', $projects->language) }}</p>
+            <h5>{{$types->type}}</h5>
         </div>
     </div>
 @endsection

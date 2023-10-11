@@ -19,7 +19,7 @@
             </div>
             <div class="col-md-6 py-3">
                 <div class="input-size">
-                    <input type="file" name="image" accept="image/*">
+                    <input class="form-control" type="file" name="image" accept="image/*">
                     {{-- <input type="text" class="form-control" name="image-text" placeholder="URL image"> --}}
                 </div>
             </div>
@@ -48,6 +48,13 @@
                 <div class="input-size">
                     <input type="text" class="form-control" name="language" placeholder="Languages Used">
                 </div>
+            </div>
+            <div class="col-md-6 py-3">
+                <select name="type_id" id="type_id" class="form-select">
+                    @foreach ( $types as $type)                        
+                    <option value="{{$type->id}}">{{$type->type}}</option>
+                    @endforeach
+                </select>
             </div>
 
             <button type="submit" class="btn btn-primary my-3">Add Project to your Page</button>

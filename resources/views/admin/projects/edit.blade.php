@@ -49,6 +49,13 @@
                     <input type="text" class="form-control" name="language" placeholder="Languages Used" value="{{ old("language", implode(', ', $projects->language))}}">
                 </div>
             </div>
+            <div class="col-md-6 py-3">
+                <select name="type_id" id="type_id" class="form-select" @error("types_id") is-invalid @enderror>
+                    @foreach ( $types as $type)                        
+                    <option value="{{$type->id}}">{{$type->type}}</option>
+                    @endforeach
+                </select>
+            </div>
 
             <button type="submit" class="btn btn-primary my-3">Update Project to your Page</button>
             </form>

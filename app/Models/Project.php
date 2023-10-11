@@ -23,6 +23,13 @@ class Project extends Model
         "image",
         "link",
         "date",
-        "language"
+        "language",
+        "type_id"
     ];
+
+
+
+    public function type() {
+        return $this->belongsTo(Type::class);
+    }
 }
