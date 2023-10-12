@@ -70,8 +70,8 @@
                         <div class="accordion-body">
                             @foreach ($technologies as $technology)
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="technology_id"
-                                        id="technology_id">
+                                    <input class="form-check-input" type="checkbox" value="{{$technology->id}}"
+                                        id="{{$technology->id}}" name="technologies[]">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         {{ $technology->name }}
                                     </label>
@@ -80,7 +80,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <button type="submit" class="btn btn-primary my-3">Add Project to your Page</button>

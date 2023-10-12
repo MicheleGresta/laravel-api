@@ -9,7 +9,6 @@ use App\Models\Type;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Log;
 
 class ProjectController extends Controller
 {
@@ -69,17 +68,21 @@ class ProjectController extends Controller
             'date' => 'nullable|date',
             'language' => 'nullable|string',
             'type_id' => 'exists:types,id',
-            'technology_id' => 'nullable|exists:technologies,id'
+            'technologies'=>'nullable'
         ]);
-        $data["language"] = explode(", ", $data["language"]);
 
         // STORAGE PUT
         $data['image'] = Storage::put("uploads", $data["image"]);
-
         $projects = Project::create($data);
 
-        // associazione
-        $projects->technologies()->attach($projects["technologies"]);
+        // associazione 
+        if (key_exists("technologies", $data)){
+            $projects->technologies()->attach($data["technologies"]);
+        }
+        
+        // if ($data["technologies"]){
+        //     $projects->technologies()->attach($data["technologies"]);
+        // }
 
         return redirect()->route("admin.projects.show", $projects->id);
     }
@@ -90,6 +93,7 @@ class ProjectController extends Controller
         $projects = Project::findOrFail($id);
         $types = Type::all();
         $technologies = Technology::all();
+        
 
         return view("admin.projects.edit", compact("projects", "types", "technologies"));
     }
@@ -107,23 +111,29 @@ class ProjectController extends Controller
             'date' => 'nullable|date',
             'language' => 'nullable|string',
             'type_id' => 'exists:types,id',
-            'technology_id' => 'nullable|exists:technologies,id'
+            'technologies'=>'nullable'
         ]);
-
-        $data["language"] = json_encode([$data["language"]]);
 
 
         // STORAGE PUT
-        $data["image"] = Storage::put("uploads", $data["image"]);
+        // $data["image"] = Storage::put("uploads", $data["image"]);
+        // per riavere l'immagine vecchia
+        if (isset($data["image"])){
+            if ($projects->image){
+                Storage::delete($projects->image);
+            }
+            $image_path = Storage::put("uploads", $data["image"]);
+            $data["image"] = $image_path;
+        };    
 
         // associazione
-        $projects->technologies()->sync($projects["technologies"]);
+        $projects->technologies()->sync($data["technologies"]);
 
         // save 
         $projects->update($data);
 
 
-        return redirect()->route("admin.projects.show", compact($projects->id));
+        return redirect()->route("admin.projects.show", $projects->id);
     }
 
     // DESTROY PROJECT
@@ -133,6 +143,7 @@ class ProjectController extends Controller
         if ($projects->image) {
             Storage::delete($projects->image);
         }
+        $projects->technologies()->detach();
         $projects->delete();
 
         return redirect()->route("layouts.projectPage");
