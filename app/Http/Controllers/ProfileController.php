@@ -19,6 +19,8 @@ class ProfileController extends Controller
         return view('admin.profile.edit', [
             'user' => $request->user(),
         ]);
+
+        
     }
 
     /**

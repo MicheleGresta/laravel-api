@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -32,10 +33,10 @@ class ProjectController extends Controller
     //public function show(string $title)
     public function show($id)
     {
-        
+
         // $projects = Project::where("title", $title)->first();
         $projects = Project::findOrFail($id);
-        
+
 
         return view("admin.projects.show", compact("projects"));
     }
@@ -43,7 +44,7 @@ class ProjectController extends Controller
     public function showPublic($id)
     {
         $projects = Project::findOrFail($id);
-        
+
 
         return view("projects.show", compact("projects"));
     }
@@ -51,16 +52,15 @@ class ProjectController extends Controller
     // CREATE NEW PROJECT
     public function create()
     {
-
         $types = Type::all();
+        $technologies = Technology::all();
 
-        return view("admin.projects.create", compact("types"));
+        return view("admin.projects.create", compact("types", "technologies"));
     }
 
     // STORE 
     public function store(Request $request)
     {
-
         $data = $request->validate([
             'title' => 'required|string',
             'image' => 'nullable|image|max:5120',
@@ -68,16 +68,18 @@ class ProjectController extends Controller
             'link' => 'required|string',
             'date' => 'nullable|date',
             'language' => 'nullable|string',
-            'type_id'=> 'exists:types,id'
+            'type_id' => 'exists:types,id',
+            'technology_id' => 'nullable|exists:technologies,id'
         ]);
         $data["language"] = explode(", ", $data["language"]);
-        
-
 
         // STORAGE PUT
         $data['image'] = Storage::put("uploads", $data["image"]);
 
         $projects = Project::create($data);
+
+        // associazione
+        $projects->technologies()->attach($projects["technologies"]);
 
         return redirect()->route("admin.projects.show", $projects->id);
     }
@@ -87,8 +89,9 @@ class ProjectController extends Controller
     {
         $projects = Project::findOrFail($id);
         $types = Type::all();
+        $technologies = Technology::all();
 
-        return view("admin.projects.edit", compact("projects","types"));
+        return view("admin.projects.edit", compact("projects", "types", "technologies"));
     }
 
     // UPDATE PROJECT
@@ -103,7 +106,8 @@ class ProjectController extends Controller
             'link' => 'required|string',
             'date' => 'nullable|date',
             'language' => 'nullable|string',
-            'type_id'=> 'exists:types,id'
+            'type_id' => 'exists:types,id',
+            'technology_id' => 'nullable|exists:technologies,id'
         ]);
 
         $data["language"] = json_encode([$data["language"]]);
@@ -112,8 +116,12 @@ class ProjectController extends Controller
         // STORAGE PUT
         $data["image"] = Storage::put("uploads", $data["image"]);
 
+        // associazione
+        $projects->technologies()->sync($projects["technologies"]);
+
         // save 
         $projects->update($data);
+
 
         return redirect()->route("admin.projects.show", compact($projects->id));
     }
